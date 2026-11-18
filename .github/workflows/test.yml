@@ -54,6 +54,13 @@ jobs:
           source-url: https://nuget.pkg.github.com/graphql-dotnet/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props', '**/*.targets', '*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
       - name: Install dependencies
         run: dotnet restore
       - name: Build solution [Release]
@@ -88,6 +95,13 @@ jobs:
           source-url: https://nuget.pkg.github.com/graphql-dotnet/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props', '**/*.targets', '*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
       - name: Publish NativeAOT sample
         working-directory: samples/Samples.NativeAot
         run: dotnet publish -c Release -o published
